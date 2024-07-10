@@ -51,6 +51,11 @@ const postSchema = new Schema({
             type: Date,
             required: true
         },
+        time:
+        {
+            type: String,
+            required: true   
+        }
     },
     createdby:
     {

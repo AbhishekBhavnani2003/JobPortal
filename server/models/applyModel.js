@@ -16,11 +16,6 @@ const applySchema = new Schema({
         type: String,
         required: true
     },
-    location:
-    {
-        type: String,
-        required: true
-    },
     gender:
     {
         type: String,
@@ -36,6 +31,17 @@ const applySchema = new Schema({
         type: String,
         required: true
 
+    } , 
+    status :
+    {
+      type : String , 
+      required : true , 
+      default : " You will get the status soon .. "
+    } ,
+    postid : 
+    {
+        type: String,
+        required: true
     }
 });
 

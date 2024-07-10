@@ -1,5 +1,5 @@
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -8,6 +8,11 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Token from './Token'
 import { useNavigate } from 'react-router-dom'
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import dayjs from 'dayjs';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -29,13 +34,14 @@ const initialpost = {
     {
         venue: '',
         date: '',
+        time: null
     }
 
 }
 
 export default function Example() {
 
-    const isDesktop = window.innerWidth > 768;
+    const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
 
     const [category, setCategory] = React.useState('');
     const [gender, setgender] = useState('')
@@ -43,7 +49,25 @@ export default function Example() {
 
     const navigate = useNavigate()
 
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsDesktop(window.innerWidth > 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const handleform = (e) => {
+
+        if (!e || !e.target) {
+            console.error('Event or target is null');
+            return;
+        }
         const { name, value } = e.target
         setPost((prevPost) => ({
             ...prevPost,
@@ -80,6 +104,18 @@ export default function Example() {
     }
 
 
+
+    const handleTimeChange = (newValue) => {
+        setPost((prevPost) => ({
+            ...prevPost,
+            audition: {
+                ...prevPost.audition,
+                time: newValue,
+            },
+        }));
+    };
+
+
     const savePost = async (event) => {
         event.preventDefault();
         const token = Token();
@@ -103,7 +139,7 @@ export default function Example() {
 
             if (response.ok) {
                 console.log("Post saved successfully");
-                navigate("/");
+                navigate("/jobs");
             } else {
                 console.error("Failed to save post:", response.statusText);
                 const result = await response.json();
@@ -120,12 +156,17 @@ export default function Example() {
             <div
                 className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
                 aria-hidden="true"
+                style={{
+                    marginTop: '500px',
+                    display: 'none'
+                }}
             >
                 <div
                     className="relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem]"
                     style={{
                         clipPath:
                             'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                        marginTop: '100px'
                     }}
                 />
             </div>
@@ -179,8 +220,8 @@ export default function Example() {
                         </Box>
 
                         <Box sx={{
-                               minWidth: 250,
-                            ...(isDesktop ? { marginLeft: '40px' } : { marginTop: '20px' })
+                            minWidth: 250,
+                            ...(isDesktop ? { marginLeft: '75px' } : { marginTop: '20px' })
                         }}>
 
                             <FormControl fullWidth>
@@ -231,7 +272,7 @@ export default function Example() {
                                 name="agegroup.from"
                                 id="agegroup.from"
                                 min={18}
-                                style={isDesktop ? { padding: '15px' } : { padding: '0px' }}
+                                style={isDesktop ? { padding: '15px' } : { padding: '5px' }}
                                 onChange={handleform}
                                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
@@ -245,7 +286,7 @@ export default function Example() {
                                 name="agegroup.to"
                                 id="agegroup.to"
                                 min={18}
-                                style={isDesktop ? { padding: '15px' } : { padding: '0px' }}
+                                style={isDesktop ? { padding: '15px' } : { padding: '5px' }}
                                 onChange={handleform}
                                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
@@ -289,6 +330,23 @@ export default function Example() {
                             />
                         </div>
 
+                        <label htmlFor="time" className="block text-sm font-semibold leading-6 text-blue-900" style={{ textAlign: 'left', marginTop: '10px' }}>
+                            Time
+                        </label>
+
+                        <div className="mt-2.5">
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['TimePicker']}>
+                                    <TimePicker
+                                        label="Audition Time"
+                                        value={post.audition.time ? dayjs(post.audition.time) : null} // Ensure the value is a dayjs object
+                                        onChange={(newValue) => handleTimeChange(newValue)}
+                                        sx={{ width: '100%' }}
+                                    />
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </div>
+
                     </div>
 
 
@@ -313,7 +371,7 @@ export default function Example() {
                         type="submit"
                         className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
-                        Let's talk
+                        Post
                     </button>
                 </div>
             </form>

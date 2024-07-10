@@ -13,6 +13,12 @@ import Home from './component/Home';
 import Signup from './component/Signup';
 import Login from './component/Login';
 import Jobpost from './component/JobPost'
+import Mainjobpage from './component/Mainjobpage';
+import Applicationform from './component/Applicationform';
+import Yourjob from './component/Yourjob';
+import Displayapplicants from './component/Displayapplicants';
+import AppliedJobs from './component/AppliedJobs';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
@@ -24,6 +30,11 @@ function App() {
           <Route exact path='/signup' element={<Signup/>}/>
           <Route exact path='/login' element={<Login/>}></Route>
           <Route exact path='/postjob' element={<Jobpost/>}></Route>
+          <Route exact path='/jobs' element={<Mainjobpage/>}></Route>
+          <Route exact path='/applicationform/:id' element={<Applicationform/>}></Route>
+          <Route exact path='/applicants/:id' element={<Displayapplicants/>}></Route>
+          <Route exact path='/yourjobs' element={<Yourjob/>}></Route>
+          <Route exact path='/appliedjobs' element={<AppliedJobs/>}></Route>
         </Routes>
        </Router>
     </div>
