@@ -31,7 +31,8 @@ app.use('/api/auth', postRoutes);
 const applicationRotes = require('./routes/applicationRoutes')
 app.use('/api/auth',applicationRotes)
 
-
+const filterRoute = require('./routes/filterroute') 
+app.use('/api/auth' , filterRoute)
 
 app.get('/', (req, res) => {
     res.send("Hello World");

@@ -1,57 +1,50 @@
-import React, {useState} from "react";
-import { useNavigate} from 'react-router-dom'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {Typography } from "@mui/material";
 
 function Login() {
-  
-    const navigate = useNavigate() ;
+  const navigate = useNavigate();
 
   const [login, setlogin] = useState({
-    email:"" , 
-    password : "" ,
-  })
+    email: "",
+    password: "",
+  });
 
-  const [msg, setmsg] = useState("") 
+  const [msg, setmsg] = useState("");
 
-  const inputChange = (e) => 
-    {
-        const {name,value} = e.target 
-        setlogin((prevLogin) => ({
-            ...prevLogin , 
-            [name] : value 
-        }))
+  const inputChange = (e) => {
+    const { name, value } = e.target;
+    setlogin((prevLogin) => ({
+      ...prevLogin,
+      [name]: value,
+    }));
+  };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const url = "http://localhost:5000/api/auth/login";
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(login),
+    });
+
+    const query = await response.json();
+    console.log(query);
+
+    if (response.status === 200) {
+      setmsg(" Login Success ");
+      sessionStorage.setItem("accesstoken", `${query.accesstoken}`);
+      sessionStorage.setItem("refreshtoken", `${query.refreshtoken}`);
+      sessionStorage.setItem("name", `${query.name}`);
+      navigate("/");
+    } else {
+      setmsg(" Invalid Credentials  ");
     }
-
-  const handleLogin = async(e) => 
-    {
-        e.preventDefault() ; 
-        const url = "http://localhost:5000/api/auth/login" ; 
-
-        const response = await fetch(url , {
-            method : 'POST' , 
-            headers : {
-                "Content-Type": "application/json",
-            } , 
-            body : JSON.stringify(login)
-        })
-
-        const query = await response.json() ; 
-        console.log(query)
-
-
-        if(response.status === 200)
-            {
-                setmsg(" Login Success ") ; 
-                sessionStorage.setItem("accesstoken" , `${query.accesstoken}`) ; 
-                sessionStorage.setItem("refreshtoken" , `${query.refreshtoken}`) ; 
-                sessionStorage.setItem("name" , `${query.name}`) ; 
-                navigate('/')
-            }
-            else
-            {
-                setmsg(" Invalid Credentials  ")
-            }
-    }
+  };
 
   return (
     <div>
@@ -61,7 +54,8 @@ function Login() {
             <div
               className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
               style={{
-                backgroundImage: "url(https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg)",
+                backgroundImage:
+                  "url(https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg)",
               }}
             ></div>
           </div>
@@ -75,7 +69,10 @@ function Login() {
             </div>
             <div className="mt-2 flex flex-col items-center">
               <div className="w-full flex-1 mt-8">
-                <div className="my-10 border-b text-center" style={{marginTop:'-20px'}}>
+                <div
+                  className="my-10 border-b text-center"
+                  style={{ marginTop: "-20px" }}
+                >
                   <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
                     Login
                   </div>
@@ -97,9 +94,10 @@ function Login() {
                     onChange={inputChange}
                   />
 
-
-                  <button className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
-                  onClick={(e)=> handleLogin(e)}>
+                  <button
+                    className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+                    onClick={(e) => handleLogin(e)}
+                  >
                     <svg
                       className="w-6 h-6 -ml-2"
                       fill="none"
@@ -114,13 +112,32 @@ function Login() {
                     </svg>
                     <span className="ml-3">Login</span>
                   </button>
-                  <p className="mt-6 text-xs text-gray-600 text-center" style={{ fontSize: '15px' }}>
-                    Create an Account : 
-                    <a href="/signup" className="border-b border-gray-500 border-dotted text-blue-700" style={{ marginLeft: '5px' }}>
-                    Signup
-                  </a>
+                  <p
+                    className="mt-6 text-xs text-gray-600 text-center"
+                    style={{ fontSize: "15px" }}
+                  >
+                    Create an Account :
+                    <a
+                      href="/signup"
+                      className="border-b border-gray-500 border-dotted text-blue-700"
+                      style={{ marginLeft: "5px" }}
+                    >
+                      Signup
+                    </a>
                   </p>
                 </div>
+
+                {msg && (
+                  <Typography
+                    style={{
+                      textAlign: "center",
+                      marginTop: "20px",
+                      color: "red",
+                    }}
+                  >
+                    {msg}
+                  </Typography>
+                )}
               </div>
             </div>
           </div>

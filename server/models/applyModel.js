@@ -26,6 +26,11 @@ const applySchema = new Schema({
         type: Number,
         required: true
     },
+    experience:
+    {
+        type: Number,
+        required: true
+    },
     category:
     {
         type: String,

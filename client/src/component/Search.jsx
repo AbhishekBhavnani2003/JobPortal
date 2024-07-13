@@ -1,6 +1,13 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 function Search() {
+ 
+  const navigate = useNavigate()
+  const handlesubmit = () => 
+  {
+     navigate('/jobs')
+  }
   return (
     <div style={{ paddingBottom: "30px", background: "#EBEDF0" }}>
       <div className="relative w-full max-w-xl mx-auto bg-white rounded-full">
@@ -13,6 +20,7 @@ function Search() {
         />
         <button
           type="submit"
+          onClick={() => handlesubmit()}
           className="absolute inline-flex items-center h-10 px-4 py-2 text-sm text-white transition duration-150 ease-in-out rounded-full outline-none right-3 top-3 bg-blue-500  sm:px-6 sm:text-base sm:font-medium hover:bg-blue-600  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
           <svg

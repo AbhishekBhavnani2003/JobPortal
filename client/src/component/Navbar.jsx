@@ -18,7 +18,7 @@ const navigation = [
   { name: "Post Job", href: "/postjob", title: "Post Job", current: false },
   {
     name: "Customer Support",
-    href: "/",
+    href: "/contact",
     title: "Customer Support",
     current: false,
   },
@@ -38,7 +38,7 @@ export default function Example() {
 
     const currentPage = navigation.find((item) => item.href === path);
     if (currentPage) {
-      document.title = `JobPortal : ${currentPage.title}`;
+      document.title = `CastFit : ${currentPage.title}`;
     }
 
     const favicon = document.getElementById("favicon");
@@ -94,7 +94,7 @@ export default function Example() {
                       color: "yellow",
                     }}
                   >
-                    J
+                    🎬
                   </div>
                   <Link
                     to="/"
@@ -104,7 +104,7 @@ export default function Example() {
                       marginLeft: "8px",
                     }}
                   >
-                    JobPilot.
+                   Cαട𝜏Ƒι𝜏.
                   </Link>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">

@@ -18,7 +18,9 @@ import Applicationform from './component/Applicationform';
 import Yourjob from './component/Yourjob';
 import Displayapplicants from './component/Displayapplicants';
 import AppliedJobs from './component/AppliedJobs';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import Footer from './component/Footer';
+import Updatepost from './component/Updatepost';
+import Contact from './component/Contact';
 
 function App() {
   return (
@@ -35,7 +37,10 @@ function App() {
           <Route exact path='/applicants/:id' element={<Displayapplicants/>}></Route>
           <Route exact path='/yourjobs' element={<Yourjob/>}></Route>
           <Route exact path='/appliedjobs' element={<AppliedJobs/>}></Route>
+          <Route exact path='/updatepost/:id' element={<Updatepost/>}></Route>
+          <Route exact path='/contact' element={<Contact/>}></Route>
         </Routes>
+      
        </Router>
     </div>
   );

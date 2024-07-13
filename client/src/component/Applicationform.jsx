@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -17,15 +17,18 @@ function Applicationform() {
     location: "",
     gender: "",
     age: "",
+    experience: "",
     category: "",
   };
 
   const [application, setapplication] = useState(initialapplication);
   const [gender, setGender] = useState("");
   const [age, setAge] = useState("");
+  const [experience, setExperience] = useState("");
   const [post, setPost] = useState(null);
+  const [errors, setErrors] = useState({});
   const { id } = useParams();
-  const navigate = useNavigate() ; 
+  const navigate = useNavigate(); 
   console.log(id);
 
   useEffect(() => {
@@ -49,6 +52,8 @@ function Applicationform() {
 
         const data = await response.json();
         setPost(data);
+        setGender(data.gender); 
+        setExperience(data.experience);
       } catch (error) {
         console.log(error);
       }
@@ -65,58 +70,102 @@ function Applicationform() {
 
     const { name, value } = e.target;
 
-    setapplication((prevPost) => ({
-      ...prevPost,
+    setapplication((prevApplication) => ({
+      ...prevApplication,
       [name]: value,
     }));
 
-    if (name === "gender") {
-      setGender(value);
-
-    }
     if (name === "age") {
       setAge(value);
     }
-  }; 
 
+    if (name === "experience") {
+      setExperience(value);
+    }
 
-  const submitapplication = async (e) => 
-  {
+    // Clear any existing errors when user starts typing
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+    }));
+
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    const { contactno, age, experience } = application;
+
+    // Validate contact number 
+    if (contactno.length !== 10) {
+      newErrors.contactno = "Contact number must be exactly 10 digits.";
+    }
+
+    // Validate age
+    if (post && post.agegroup) {
+      const ageValue = parseInt(age, 10);
+      if (ageValue < post.agegroup.from || ageValue > post.agegroup.to) {
+        newErrors.age = `Age must be between ${post.agegroup.from} and ${post.agegroup.to}.`;
+      }
+    }
+
+    // Validate experience
+    if (post && post.experience) {
+      const experienceValue = parseInt(experience, 10);
+      if (experienceValue < post.experience) {
+        newErrors.experience = `Experience must be at least ${post.experience} years.`;
+      }
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const submitapplication = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
     const token = Token();
-    const postcategory = post.category ; 
-    const postid = post._id
-    const appdata = 
-    {
-       ...application , 
-       category : postcategory  , 
-       postid : postid 
-    } ; 
+    const postcategory = post.category;
+    const postid = post._id;
+    const postgender = post.gender ;
+    const name = sessionStorage.getItem('name')
+    const appdata = {
+      ...application,
+      category: postcategory,
+      name : name ,
+      gender : postgender , 
+      postid: postid
+    };
+
     try {
       const response = await fetch(
-          "http://localhost:5000/api/auth/newapplication",
-          {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json",
-                  Authorization: ` ${token}`,
-              },
-              body: JSON.stringify(appdata),
-          }
+        "http://localhost:5000/api/auth/newapplication",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: ` ${token}`,
+          },
+          body: JSON.stringify(appdata),
+        }
       );
 
       if (response.ok) {
-          console.log("Application saved successfully");
-          navigate("/jobs");
+        console.log("Application saved successfully");
+        navigate("/jobs");
       } else {
-          console.error("Failed to save post:", response.statusText);
-          const result = await response.json();
-          console.error("Error response:", result);
+        console.error("Failed to save post:", response.statusText);
+        const result = await response.json();
+        console.error("Error response:", result);
       }
-  } catch (error) {
+    } catch (error) {
       console.error("Error saving post:", error);
-  }
-  }
+    }
+  };
 
   return (
     <div>
@@ -143,8 +192,9 @@ function Applicationform() {
                   id="name"
                   type="text"
                   name="name"
+                  value={sessionStorage.getItem('name')}
+                  readOnly
                   placeholder="Enter your name" 
-                  onChange={handleform}
                 />
               </div>
               <div className="mb-4">
@@ -159,9 +209,13 @@ function Applicationform() {
                   id="contactno"
                   type="text"
                   name="contactno"
+                  value={application.contactno}
                   onChange={handleform}
                   placeholder="Enter your contact number"
                 />
+                {errors.contactno && (
+                  <p className="text-red-500 text-xs italic">{errors.contactno}</p>
+                )}
               </div>
               <div className="mb-4">
                 <label
@@ -175,13 +229,13 @@ function Applicationform() {
                   id="address"
                   rows="4"
                   name="address"
+                  value={application.address}
                   onChange={handleform}
                   placeholder="Enter your address"
                 ></textarea>
               </div>  
 
-
-              <div className="mb-4" style={{marginBottom:'20px'}}> 
+              <div className="mb-4">
                 <label
                   className="block text-gray-700 font-bold mb-2"
                   htmlFor="location"
@@ -193,28 +247,37 @@ function Applicationform() {
                   id="location"
                   type="text"
                   name="location"
+                  value={application.location}
                   onChange={handleform}
                   placeholder="Enter your state"
                 />
               </div>
 
-              <FormControl fullWidth sx={{ marginBottom: "20px" }}>
-                <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={gender}
-                  onChange={handleform}
-                  label="Gender"
-                  name="gender"
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 font-bold mb-2"
+                  htmlFor="gender"
                 >
-                  <MenuItem value={"male"}>Male</MenuItem>
-                  <MenuItem value={"female"}>Female</MenuItem>
-                  <MenuItem value={"others"}>Others</MenuItem>
-                </Select>
-              </FormControl>
+                  Gender
+                </label>
+                <input
+                  className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="gender"
+                  type="text"
+                  name="gender"
+                  value={gender}
+                  readOnly
+                />
+              </div>
 
-              <div style={{ textAlign: "center" }}>Age :</div>
+              <div style={{ textAlign: "center" }}>
+              <label
+                  className="block text-gray-700 font-bold mb-2"
+                  htmlFor="age"
+                >
+                  Age 
+                </label>
+              </div>
               {post && post.agegroup && (
                 <FormControl
                   fullWidth
@@ -230,8 +293,35 @@ function Applicationform() {
                     onChange={handleform}
                     className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
+                  {errors.age && (
+                    <p className="text-red-500 text-xs italic">{errors.age}</p>
+                  )}
                 </FormControl>
               )}
+              
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 font-bold mb-2"
+                  htmlFor="experience"
+                >
+                  Experience (in years)
+                </label>
+                <input
+                  className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="experience"
+                  type="number"
+                  name="experience"
+                  value={experience}
+                  min={0 || (post)? post.experience : 0} 
+                  max={20}
+                  onChange={handleform}
+                  placeholder="Enter your experience in years"
+                />
+                {errors.experience && (
+                  <p className="text-red-500 text-xs italic">{errors.experience}</p>
+                )}
+              </div>
+
               <div className="flex justify-end" style={{ marginTop: "50px" }}>
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

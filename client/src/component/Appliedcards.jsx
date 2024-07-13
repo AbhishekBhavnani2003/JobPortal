@@ -1,90 +1,114 @@
-import React from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, CardActions } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button
+} from "@mui/material";
 import Token from "./Token";
 
-const MultiActionAreaCard = ({ applicant }) => {
-  const navigate = useNavigate();
+const ApplicantTable = ({ applicants }) => {
+  const [posts, setPosts] = useState([]);
+  const [updateTrigger, setUpdateTrigger] = useState(false);
 
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const token = Token();
+      const fetchedPosts = await Promise.all(
+        applicants.map(async (applicant) => {
+          const postid = applicant.postid;
+          const url = `http://localhost:5000/api/auth/getpost/${postid}`;
+          const response = await fetch(url, {
+            method: "GET",
+            headers: {
+              Authorization: `${token}`,
+              "Content-Type": "application/json",
+            },
+          });
+          const data = await response.json();
+          return { ...data, applicantId: applicant._id };
+        })
+      );
+      setPosts(fetchedPosts);
+    };
 
-  const handleApply = async (status) => {
-      
-    const id = applicant._id 
-    const url = `http://localhost:5000/api/auth/updatestatus/${id}`
-    const token = Token()
+    fetchPosts();
+  }, [applicants, updateTrigger]);
+
+  const handleApply = async (id, status) => {
+    const url = `http://localhost:5000/api/auth/updatestatus/${id}`;
+    const token = Token();
     const response = await fetch(url, {
-      method : "PUT" , 
-      headers : 
-      {
+      method: "PUT",
+      headers: {
         Authorization: `${token}`,
         "Content-Type": "application/json",
-      }, 
-      body : JSON.stringify({status : status})
-    })
-    
+      },
+      body: JSON.stringify({ status: status }),
+    });
+
+    if (response.ok) {
+      setUpdateTrigger((prev) => !prev);
+    } else {
+      console.log("Failed to update status");
+    }
+  };
+
+  const getPostDetails = (applicantId) => {
+    return posts.find((post) => post.applicantId === applicantId) || {};
   };
 
   return (
-    <Card sx={{ maxWidth: 600, minWidth: 350, margin: "30px" }}>
-      <CardActionArea>
-        <CardContent>
-          <Typography variant="h6">Name:</Typography>
-          <Typography variant="body2" color="text.secondary">
-            {applicant.name}
-          </Typography>
-        </CardContent>
-
-        <CardContent>
-          <Typography variant="h6">Address:</Typography>
-          <Typography variant="body2" color="text.secondary">
-            {applicant.address}
-          </Typography>
-        </CardContent>
-
-        <CardContent sx={{ display: "flex", alignItems: "center", justifyContent:'center' , alignContent:'center' }}>
-          <Typography variant="h6">Age:</Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ marginLeft: "5px" }}>
-            {applicant.age} yrs
-          </Typography>
-        </CardContent>
-
-        <CardContent sx={{ display: "flex", alignItems: "center" , justifyContent:'center'}}>
-          <Typography variant="h6">Contact no:</Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ marginLeft: "5px" }}>
-            {applicant.contactno}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-
-      <CardActions sx={{ justifyContent: "space-around" }}>
-        <div>
-          <Typography variant="h6">Category:</Typography>
-          <Button size="small" color="primary">
-            {applicant.category}
-          </Button>
-        </div>
-        <div>
-          <Typography variant="h6">Gender:</Typography>
-          <Button size="small" color="primary">
-            {applicant.gender}
-          </Button>
-        </div>
-      </CardActions>
-
-
-      <CardActions sx={{ justifyContent: "center" , display:'flex' , flexDirection:'column' }}>
-        <Typography variant="h6">~ See your application status here:</Typography>
-        <Button size="small" color="primary">
-            {applicant.status}
-          </Button>
-      </CardActions>
-
-    </Card>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Title</TableCell>
+            <TableCell>Category</TableCell>
+            <TableCell>Description</TableCell>
+            <TableCell>Experience</TableCell>
+            <TableCell>Gender</TableCell>
+            <TableCell>Age Group</TableCell>
+            <TableCell>Audition Venue</TableCell>
+            <TableCell>Audition Date</TableCell>
+            <TableCell>Audition Time</TableCell>
+            <TableCell>Status</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {applicants.map((applicant) => {
+            const post = getPostDetails(applicant._id);
+            return (
+              <TableRow key={applicant._id}>
+                <TableCell>{post.title}</TableCell>
+                <TableCell>{post.category}</TableCell>
+                <TableCell>{post.description}</TableCell>
+                <TableCell>{post.experience} yrs</TableCell>
+                <TableCell>{post.gender}</TableCell>
+                <TableCell>{`${post.agegroup?.from} - ${post.agegroup?.to}`}</TableCell>
+                <TableCell>{post.audition?.venue}</TableCell>
+                <TableCell>{new Date(post.audition?.date).toLocaleDateString()}</TableCell>
+                <TableCell>{new Date(post.audition?.time).toLocaleTimeString()}</TableCell>
+                <TableCell>
+                  <Button
+                    size="small"
+                    color="primary"
+                    onClick={() => handleApply(applicant._id, "Reviewed")}
+                  >
+                    {applicant.status}
+                  </Button>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
-export default MultiActionAreaCard;
-
+export default ApplicantTable;

@@ -1,99 +1,109 @@
-import React from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, CardActions } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Typography
+} from "@mui/material";
 import Token from "./Token";
 
-const MultiActionAreaCard = ({ applicant }) => {
-  const navigate = useNavigate();
+const ApplicantTable = ({ applicants }) => {
+  const [applicantData, setApplicantData] = useState(applicants);
 
+  useEffect(() => {
+    setApplicantData(applicants);
+  }, [applicants]);
 
-  const handleApply = async (status) => {
-      
-    const id = applicant._id 
-    const url = `http://localhost:5000/api/auth/updatestatus/${id}`
-    const token = Token()
+  const handleApply = async (id, status) => {
+    const url = `http://localhost:5000/api/auth/updatestatus/${id}`;
+    const token = Token();
     const response = await fetch(url, {
-      method : "PUT" , 
-      headers : 
-      {
+      method: "PUT",
+      headers: {
         Authorization: `${token}`,
         "Content-Type": "application/json",
-      }, 
-      body : JSON.stringify({status : status})
-    })
-    
+      },
+      body: JSON.stringify({ status: status }),
+    });
+
+    if (response.ok) {
+      setApplicantData((prevData) =>
+        prevData.map((applicant) =>
+          applicant._id === id ? { ...applicant, status: status } : applicant
+        )
+      );
+    } else {
+      console.log("Failed to update status");
+    }
   };
 
   return (
-    <Card sx={{ maxWidth: 600, minWidth: 350, margin: "30px" }}>
-      <CardActionArea>
-        <CardContent>
-          <Typography variant="h6">Name:</Typography>
-          <Typography variant="body2" color="text.secondary">
-            {applicant.name}
-          </Typography>
-        </CardContent>
-
-        <CardContent>
-          <Typography variant="h6">Address:</Typography>
-          <Typography variant="body2" color="text.secondary">
-            {applicant.address}
-          </Typography>
-        </CardContent>
-
-        <CardContent sx={{ display: "flex", alignItems: "center", justifyContent:'center' , alignContent:'center' }}>
-          <Typography variant="h6">Age:</Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ marginLeft: "5px" }}>
-            {applicant.age} yrs
-          </Typography>
-        </CardContent>
-
-        <CardContent sx={{ display: "flex", alignItems: "center" , justifyContent:'center'}}>
-          <Typography variant="h6">Contact no:</Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ marginLeft: "5px" }}>
-            {applicant.contactno}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-
-      <CardActions sx={{ justifyContent: "space-around" }}>
-        <div>
-          <Typography variant="h6">Category:</Typography>
-          <Button size="small" color="primary">
-            {applicant.category}
-          </Button>
-        </div>
-        <div>
-          <Typography variant="h6">Gender:</Typography>
-          <Button size="small" color="primary">
-            {applicant.gender}
-          </Button>
-        </div>
-      </CardActions>
-
-
-      <CardActions sx={{ justifyContent: "center" }}>
-        <Typography variant="h6">~ Mark your status here:</Typography>
-        
-      </CardActions>
-
-      <CardActions sx={{ justifyContent: "center", padding: "10px" }}>
-        <Button variant="contained" onClick={() => handleApply("Accepted")}>
-          Accepted
-        </Button>
-        <Button variant="contained" onClick={() => handleApply("Rejected")}>
-          Rejected
-        </Button>
-        <Button variant="contained" onClick={() => handleApply("Hold")}>
-          Hold
-        </Button>
-      </CardActions>
-    </Card>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Address</TableCell>
+            <TableCell>Age</TableCell>
+            <TableCell>Contact No</TableCell>
+            <TableCell>Category</TableCell>
+            <TableCell>Gender</TableCell>
+            <TableCell>Experience</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {applicantData.map((applicant) => (
+            <TableRow key={applicant._id}>
+              <TableCell>{applicant.name}</TableCell>
+              <TableCell>{applicant.address}</TableCell>
+              <TableCell>{applicant.age} yrs</TableCell>
+              <TableCell>{applicant.contactno}</TableCell>
+              <TableCell>{applicant.category}</TableCell>
+              <TableCell>{applicant.gender}</TableCell>
+              <TableCell>{applicant.experience} yrs</TableCell>
+              <TableCell>{applicant.status}</TableCell>
+              <TableCell>
+                {applicant.status === " You will get the status soon .. " || applicant.status === "Hold" ? (
+                  <>
+                    <Button
+                      variant="contained"
+                      sx={{ margin: '5px' }}
+                      onClick={() => handleApply(applicant._id, "Accepted")}
+                    >
+                      Accepted
+                    </Button>
+                    <Button
+                      variant="contained"
+                      sx={{ margin: '5px' }}
+                      onClick={() => handleApply(applicant._id, "Rejected")}
+                    >
+                      Rejected
+                    </Button>
+                    <Button
+                      variant="contained"
+                      sx={{ margin: '5px' }}
+                      onClick={() => handleApply(applicant._id, "Hold")}
+                    >
+                      Hold
+                    </Button>
+                  </>
+                ) : (
+                  <Typography>Response Reviewed</Typography>
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
-export default MultiActionAreaCard;
-
+export default ApplicantTable;

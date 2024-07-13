@@ -1,30 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import MultiActionAreaCard from "./Applicantscard";
+import ApplicantTable from "./Applicantscard";
 import Token from "./Token";
 
-const JobsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 16px;
-  align-items: center;
-
-  @media (min-width: 768px) and (max-width: 999px) {
-    grid-template-columns: repeat(2, 1fr); /* Two columns for tablets */
-  }
-
-  @media (min-width: 1000px) {
-    grid-template-columns: repeat(3, 1fr); /* Three columns for desktop */
-  }
-
-  @media (max-width: 1300px) {
-    margin: auto;
-  }
-
-  @media (max-width: 400px) {
-    margin-left: -15px;
-  }
+const Container = styled.div`
+  padding: 20px;
 `;
 
 const DisplayApplicants = () => {
@@ -61,11 +42,9 @@ const DisplayApplicants = () => {
   }, [id]);
 
   return (
-    <JobsGrid>
-      {post.map((applicant) => (
-        <MultiActionAreaCard key={applicant._id} applicant={applicant} />
-      ))}
-    </JobsGrid>
+    <Container>
+      <ApplicantTable applicants={post} />
+    </Container>
   );
 };
 
