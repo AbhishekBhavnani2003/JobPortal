@@ -20,7 +20,7 @@ const ApplicantTable = ({ applicants }) => {
   }, [applicants]);
 
   const handleApply = async (id, status) => {
-    const url = `http://localhost:5000/api/auth/updatestatus/${id}`;
+    const url = `https://castfit.onrender.com/api/auth/updatestatus/${id}`;
     const token = Token();
     const response = await fetch(url, {
       method: "PUT",

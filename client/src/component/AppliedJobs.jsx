@@ -16,7 +16,7 @@ const DisplayApplicants = () => {
       try {
         const token = Token();
         const response = await fetch(
-          `http://localhost:5000/api/auth/appbyname`,
+          `https://castfit.onrender.com/api/auth/appbyname`,
           {
             method: "POST",
             headers: {

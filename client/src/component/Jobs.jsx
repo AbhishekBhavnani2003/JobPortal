@@ -47,7 +47,7 @@ export default function MultiActionAreaCard({ job }) {
   const postid = job._id;
 
   const handledelete = async () => {
-    const url = `http://localhost:5000/api/auth/deletepost/${postid}`;
+    const url = `https://castfit.onrender.com/api/auth/deletepost/${postid}`;
     const token = Token() ; 
     const response = await fetch(url, {
       method: "DELETE",

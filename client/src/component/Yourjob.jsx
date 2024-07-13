@@ -38,7 +38,7 @@ function Yourjob() {
       if (!token) {
         throw new Error('Token not found');
       }
-      const url = "http://localhost:5000/api/auth/getpostbyname";
+      const url = "https://castfit.onrender.com/api/auth/getpostbyname";
       const response = await fetch(url, {
         method: "POST",
         headers: {

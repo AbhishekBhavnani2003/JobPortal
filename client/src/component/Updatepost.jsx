@@ -47,7 +47,7 @@ export default function Example() {
   useEffect(() => {
     const exisitingjobpost = async () => {
       const token = Token();
-      const url = `http://localhost:5000/api/auth/getpost/${id}`;
+      const url = `https://castfit.onrender.com/api/auth/getpost/${id}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -167,7 +167,7 @@ export default function Example() {
     };
   
     try {
-      const url = `http://localhost:5000/api/auth/updatepost/${id}`;
+      const url = `https://castfit.onrender.com/api/auth/updatepost/${id}`;
       const response = await fetch(url, {
         method: "PUT",
         headers: {

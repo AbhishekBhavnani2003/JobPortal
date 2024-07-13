@@ -22,7 +22,7 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const url = "http://localhost:5000/api/auth/login";
+    const url = "https://castfit.onrender.com/api/auth/login";
 
     const response = await fetch(url, {
       method: "POST",

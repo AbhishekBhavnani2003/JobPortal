@@ -50,7 +50,7 @@ function JobPage() {
   const fetchJobs = async () => {
     try {
       let token = Token();
-      let url = "http://localhost:5000/api/auth/displaypost";
+      let url = "https://castfit.onrender.com/api/auth/displaypost";
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -78,7 +78,7 @@ function JobPage() {
   };
 
   const handlegenderfilters = async (gender) => {
-    const url = "http://localhost:5000/api/auth/getpostbygender";
+    const url = "https://castfit.onrender.com/api/auth/getpostbygender";
     const token = Token();
     const response = await fetch(url, {
       method: "POST",
@@ -99,7 +99,7 @@ function JobPage() {
   };
 
   const handleCategoryFilter = async (category) => {
-    const url = "http://localhost:5000/api/auth/getpostbycategory";
+    const url = "https://castfit.onrender.com/api/auth/getpostbycategory";
     const token = Token();
     const response = await fetch(url, {
       method: "POST",
@@ -121,7 +121,7 @@ function JobPage() {
   };
 
   const handleExp = async (exp) => {
-    const url = "http://localhost:5000/api/auth/getpostbyexp";
+    const url = "https://castfit.onrender.com/api/auth/getpostbyexp";
     const token = Token();
     const response = await fetch(url, {
       method: "POST",

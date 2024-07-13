@@ -21,7 +21,7 @@ const ApplicantTable = ({ applicants }) => {
       const fetchedPosts = await Promise.all(
         applicants.map(async (applicant) => {
           const postid = applicant.postid;
-          const url = `http://localhost:5000/api/auth/getpost/${postid}`;
+          const url = `https://castfit.onrender.com/api/auth/getpost/${postid}`;
           const response = await fetch(url, {
             method: "GET",
             headers: {
@@ -40,7 +40,7 @@ const ApplicantTable = ({ applicants }) => {
   }, [applicants, updateTrigger]);
 
   const handleApply = async (id, status) => {
-    const url = `http://localhost:5000/api/auth/updatestatus/${id}`;
+    const url = `https://castfit.onrender.com/api/auth/updatestatus/${id}`;
     const token = Token();
     const response = await fetch(url, {
       method: "PUT",

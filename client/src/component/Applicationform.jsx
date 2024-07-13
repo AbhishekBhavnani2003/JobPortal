@@ -36,7 +36,7 @@ function Applicationform() {
       try {
         const token = Token();
         const response = await fetch(
-          `http://localhost:5000/api/auth/getpost/${id}`,
+          `https://castfit.onrender.com/api/auth/getpost/${id}`,
           {
             method: "GET",
             headers: {
@@ -143,7 +143,7 @@ function Applicationform() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/newapplication",
+        "https://castfit.onrender.com/api/auth/newapplication",
         {
           method: "POST",
           headers: {
