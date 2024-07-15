@@ -2,23 +2,23 @@ import React from 'react'
 
 function Testimonials() { 
    
-    const testimonials = [
-        {
-          quote: "Casting Connect has revolutionized our casting process. The platform is easy to use and has connected us with incredible talent.",
-          name: "Jane Doe",
-          image: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80",
-        },
-        {
-          quote: "As an actor, I appreciate how straightforward it is to create a profile and apply for roles. Casting Connect has opened up so many opportunities for me.",
-          name: "Sarah Johnson" , 
-          image:"https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?q=80&w=1727&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        },
-        {
-          quote: "The comprehensive database and advanced search options have made finding the right talent so much easier. Highly recommend Casting Connect.",
-          name:  "John Smith", 
-          image:  "https://images.unsplash.com/photo-1530268729831-4b0b9e170218?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        }
-      ];
+  const testimonials = [
+    {
+      quote: "Casting Connect has revolutionized our casting process. The platform is easy to use and has connected us with incredible talent. We've streamlined our workflow and found actors who perfectly fit our projects. It's truly a game-changer for our production team.",
+      name: "Jane Doe",
+      image: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80",
+    },
+    {
+      quote: "As an actor, I appreciate how straightforward it is to create a profile and apply for roles. Casting Connect has opened up so many opportunities for me. The seamless application process and the range of roles available have significantly boosted my career.",
+      name: "Sarah Johnson", 
+      image: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?q=80&w=1727&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    {
+      quote: "The comprehensive database and advanced search options have made finding the right talent so much easier. Highly recommend Casting Connect. It's an invaluable resource for casting directors and has improved our efficiency in sourcing top-notch talent for various projects.",
+      name: "John Smith", 
+      image: "https://images.unsplash.com/photo-1530268729831-4b0b9e170218?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    }
+];
       
     
   return (

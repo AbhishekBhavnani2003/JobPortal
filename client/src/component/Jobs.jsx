@@ -11,7 +11,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Token from "./Token";
 
 const MAX_WORDS = 20;
-
 export default function MultiActionAreaCard({ job }) {
   const words = job.description ? job.description.split(" ") : [];
   const trim_title = job.title ? job.title.split(" ") : [];

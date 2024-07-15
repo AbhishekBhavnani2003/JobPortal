@@ -60,7 +60,7 @@ function JobPage() {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        throw new Error(`Please Login to continue ! Status: ${response.status}`);
       }
 
       const data = await response.json();
@@ -212,6 +212,7 @@ function JobPage() {
               "& > :not(style)": { m: 1, width: "25%" },
               display: "flex",
               alignItems: "center",
+              marginLeft:'-9px'
             }}
             noValidate
             autoComplete="off"

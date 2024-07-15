@@ -2,7 +2,7 @@ import React from "react";
 
 function Stats() {
   return (
-    <div style={{paddingBottom:'40px' , marginTop:'-40px'}}>
+    <div style={{ paddingBottom: "40px", marginTop: "-40px" }}>
       <section className="flex flex-col mt-20">
         <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-y-5 lg:gap-y-0 gap-x-5 place-items-center w-full mx-auto max-w-7xl px-5">
           <div className="flex flex-col justify-center items-center bg-neutral-200 px-4 h-[126px] w-[100%] md:w-[281px] md:h-[192px] rounded-lg justify-self-center">
@@ -13,7 +13,7 @@ function Stats() {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 style={{
-                    filter:'invert(100)'
+                  filter: "invert(100)",
                 }}
               >
                 <path
@@ -36,7 +36,7 @@ function Stats() {
               </p>
             </div>
             <p className="font-medium text-base sm:text-lg leading-6 mt-3 md:mt-6 text-center">
-              Expert Chat &amp; Call Minutes
+              Registered Users
             </p>
           </div>
           <div className="flex flex-col justify-center items-center bg-neutral-200  px-4 h-[126px] w-[100%] md:w-[281px] md:h-[192px] rounded-lg justify-self-center">
@@ -47,7 +47,7 @@ function Stats() {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 style={{
-                    filter:'invert(100)'
+                  filter: "invert(100)",
                 }}
               >
                 <g clipPath="url(#a)">
@@ -70,7 +70,7 @@ function Stats() {
               </p>
             </div>
             <p className="font-medium text-base sm:text-lg leading-6 mt-3 md:mt-6 text-center">
-              Average Expert Rating
+              Average User Rating
             </p>
           </div>
           <div className="flex flex-col justify-center items-center bg-neutral-200  px-4 h-[126px] w-[100%] md:w-[281px] md:h-[192px] rounded-lg justify-self-center">
@@ -81,7 +81,7 @@ function Stats() {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 style={{
-                    filter:'invert(100)'
+                  filter: "invert(100)",
                 }}
               >
                 <g
@@ -105,7 +105,7 @@ function Stats() {
               </p>
             </div>
             <p className="font-medium text-base sm:text-lg leading-6 mt-3 md:mt-6 text-center">
-              Sessions Completed
+              Casting Opportunities
             </p>
           </div>
           <div className="flex flex-col justify-center items-center bg-neutral-200  px-4 h-[126px] w-[100%] md:w-[281px] md:h-[192px] rounded-lg justify-self-center">
@@ -116,7 +116,7 @@ function Stats() {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 style={{
-                    filter:'invert(100)'
+                  filter: "invert(100)",
                 }}
               >
                 <path
@@ -135,11 +135,11 @@ function Stats() {
                 ></path>
               </svg>
               <p className="font-bold text-3xl sm:text-4xl lg:text-5xl leading-9 text-primary ml-2">
-                1.5M+
+                1.5L+
               </p>
             </div>
             <p className="font-medium text-base sm:text-lg leading-6 mt-3 md:mt-6 text-center">
-              App Downloads
+              Successful Castings
             </p>
           </div>
         </div>

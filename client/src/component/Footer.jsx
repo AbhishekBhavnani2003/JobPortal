@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 export default function Footer () {
     return (
           <div className="px-4 pt-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8" style={{backgroundColor:'#05051B',color:'white'}}>
@@ -10,8 +11,37 @@ export default function Footer () {
               className="inline-flex items-center"
             >
             </a>
+            <div
+                  className="flex flex-shrink-0 items-center"
+                  style={{
+                    marginLeft: window.innerWidth < 1024 ? "30px" : "0",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      border: "1px solid white",
+                      fontWeight: "bold",
+                      padding: "2px",
+                      margin: "2px",
+                      color: "yellow",
+                    }}
+                  >
+                    🎬
+                  </div>
+                  <Link
+                    to="/"
+                    style={{
+                      color: "#AFDDE5",
+                      fontSize: "20px",
+                      marginLeft: "8px",
+                    }}
+                  >
+                   Cαട𝜏Ƒι𝜏.
+                  </Link>
+                </div>
             <div className="mt-6 lg:max-w-sm">
-              <p className="text-sm text-gray-800"  style={{color:'white'}}>
+              <p className="text-sm text-gray-800"  style={{color:'white' , marginLeft:'-150px'}}>
               Empowering Your Career Journey
               </p>
             </div>
@@ -23,23 +53,23 @@ export default function Footer () {
             <div className="flex">
               <p className="mr-1 ">Phone:</p>
               <a
-                href="tel:1234567890"
+                href="tel:8200568656"
                 aria-label="Our phone"
                 title="Our phone"
                 className="transition-colors duration-300 text-deep-purple-accent-400 hover:text-deep-purple-800"
               >
-                +1 123 456 7890
+               +91 8200568656
               </a>
             </div>
             <div className="flex">
               <p className="mr-1 ">Email:</p>
               <a
-                href="mailto:support@jobpilot.com"
+                href="mailto:abhishekbhavnani2003@gmail.com"
                 aria-label="Our email"
                 title="Our email"
                 className="transition-colors duration-300 text-deep-purple-accent-400 hover:text-deep-purple-800"
               >
-                support@jobpilot.com
+                abhishekbhavnani2003@gmail.com
               </a>
             </div>
             <div className="flex">
@@ -52,7 +82,7 @@ export default function Footer () {
                 title="Our address"
                 className="transition-colors duration-300 text-deep-purple-accent-400 hover:text-deep-purple-800"
               >
-                123 Career Way, City, Country
+                Cast Fit , Ahmedabad , Gujarat 
               </a>
             </div>
           </div>
@@ -62,7 +92,7 @@ export default function Footer () {
             </span>
             <div className="flex items-center mt-1 space-x-3" style={{marginTop:'10px', justifyContent:'center'}}>
               <a
-                href="https://twitter.com/jobpilot"
+                href="https://twitter.com/castfit"
                 className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-400"
               >
                 <svg viewBox="0 0 24 24" fill="currentColor" className="h-5">
@@ -70,7 +100,7 @@ export default function Footer () {
                 </svg>
               </a>
               <a
-                href="https://instagram.com/jobpilot"
+                href="https://instagram.com/castfit"
                 className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-400"
               >
                 <svg viewBox="0 0 30 30" fill="currentColor" className="h-6">
@@ -79,7 +109,7 @@ export default function Footer () {
                 </svg>
               </a>
               <a
-                href="https://facebook.com/jobpilot"
+                href="https://facebook.com/castfit"
                 className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-400"
               >
                 <svg viewBox="0 0 24 24" fill="currentColor" className="h-5">
@@ -88,13 +118,13 @@ export default function Footer () {
               </a>
             </div>
             <p className="mt-4 text-sm ">
-            At JobPilot, we are dedicated to connecting talented individuals with their dream jobs, fostering growth, and empowering careers.
+            At CastFit, we are dedicated to connecting talented individuals with their dream jobs, fostering growth, and empowering careers.
             </p>
           </div>
         </div>
         <div className="flex flex-col-reverse justify-between pt-5 pb-10 border-t lg:flex-row">
           <p className="text-sm ">
-          Copyright © JobPilot 2023. All Rights Reserved.
+          Copyright © CastFit 2024. All Rights Reserved.
           </p>
           <ul className="flex flex-col mb-3 space-y-2 lg:mb-0 sm:space-y-0 sm:space-x-5 sm:flex-row">
             <li>

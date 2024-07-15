@@ -212,7 +212,7 @@ export default function Example() {
         </div>
         <div className="mx-auto max-w-2xl text-center">
           <h4 className="text-xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Hire a best fit for your requirement with JobPilot
+            Hire a best fit for your requirement with CastFit
           </h4>
           <p className="mt-2 text-lg leading-8 text-gray-600">
             All casting requirements at one place
