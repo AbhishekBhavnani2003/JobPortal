@@ -8,26 +8,53 @@ function Login() {
   });
 
   const [message, setMessage] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    const url = "https://castfit.onrender.com/api/auth/signup";
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(signup),
-    });
+    const validationErrors = validate();
+    setErrors(validationErrors);
+    setMessage("");
+    if (Object.keys(validationErrors).length === 0) {
+      const url = "https://castfit.onrender.com/api/auth/signup";
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(signup),
+      });
 
-    const json = await response.json();
-    console.log(json);
+      const json = await response.json();
+      console.log(json);
 
-    if (response.status === 200) {
-      setMessage("User Registered Successfully. Please Login to continue.");
-    } else {
-      setMessage("User Not Registered Successfully");
+      if (response.status === 200) {
+        setMessage("User Registered Successfully. Please Login to continue.");
+      } else if (response.status === 409) {
+        setMessage("Email is already registered.");
+        setErrors({ email: "Email is already registered" });
+      } else {
+        setMessage("User Not Registered Successfully");
+      }
     }
+  };
+
+  const validate = () => {
+    const errors = {};
+    if (!signup.name.trim()) {
+      errors.name = "Name is required";
+    }
+    if (!signup.email) {
+      errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(signup.email)) {
+      errors.email = "Email is invalid";
+    }
+    if (!signup.password) {
+      errors.password = "Password is required";
+    } else if (signup.password.length < 6) {
+      errors.password = "Password must be at least 6 characters";
+    }
+    return errors;
   };
 
   const onInputChange = (e) => {
@@ -65,6 +92,8 @@ function Login() {
                   placeholder="Name"
                   onChange={onInputChange}
                 />
+                  {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
+
                 <input
                   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                   type="password"
@@ -73,6 +102,8 @@ function Login() {
                   placeholder="Password"
                   onChange={onInputChange}
                 />
+                  {errors.password && <p className="text-red-600 text-sm">{errors.password}</p>}
+  
                 <input
                   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                   type="email"
@@ -81,6 +112,7 @@ function Login() {
                   placeholder="Email"
                   onChange={onInputChange}
                 />
+                 {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
                 <button
                   className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                   onClick={(e)=> handleSignup(e)}
