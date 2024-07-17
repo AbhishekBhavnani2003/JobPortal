@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {Typography } from "@mui/material";
+import React, { useState , useEffect } from "react";
+import { useNavigate , Link} from "react-router-dom";
+import { Typography } from "@mui/material";
+import { messaging } from './Firebase';
+import { getToken } from 'firebase/messaging';
 
 function Login() {
   const navigate = useNavigate();
@@ -11,6 +13,7 @@ function Login() {
   });
 
   const [msg, setmsg] = useState("");
+  const [fcmToken, setFcmToken] = useState("");
 
   const inputChange = (e) => {
     const { name, value } = e.target;
@@ -19,53 +22,119 @@ function Login() {
       [name]: value,
     }));
   };
+ 
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const token = await getToken(messaging, { vapidKey: 'BKRNTjBM1eRBPXw4X1Ns112YirSresp1Tdgl2XgKwnm5MA2sICg31UFpQg7aQL0mD4CRYxC41DS9soR9Jy07e2c' });
+        if (token) {
+          setFcmToken(token);
+        } else {
+          console.warn('No registration token available. Request permission to generate one.');
+        }
+      } catch (error) {
+        console.error('An error occurred while retrieving token. ', error);
+      }
+    };
+  
+    fetchToken();
+  }, []);
+
+  useEffect(() => {
+    if (Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     const url = "https://castfit.onrender.com/api/auth/login";
-
+  
     const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(login),
+      body: JSON.stringify({ ...login, fcmToken }),
     });
-
+  
     const query = await response.json();
     console.log(query);
-
+  
     if (response.status === 200) {
       setmsg(" Login Success ");
       sessionStorage.setItem("accesstoken", `${query.accesstoken}`);
       sessionStorage.setItem("refreshtoken", `${query.refreshtoken}`);
       sessionStorage.setItem("name", `${query.name}`);
       navigate("/");
+      
+      if (Notification.permission === 'granted') {
+        new Notification('Welcome to CastFit', {
+          body: 'You have successfully logged in!',
+        });
+      } else {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            new Notification('Welcome to CastFit', {
+              body: 'You have successfully logged in!',
+            });
+          }
+        });
+      }
     } else {
-      setmsg(" Invalid Credentials  ");
+      setmsg("Invalid Credentials");
     }
   };
+  
 
   return (
     <div>
       <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
         <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
-          <div className="flex-1 bg-indigo-100 text-center hidden lg:flex">
+          <div className="flex-1 text-center hidden lg:flex">
             <div
-              className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
+              className="w-full h-full bg-cover bg-center"
               style={{
                 backgroundImage:
-                  "url(https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg)",
+                  "url(https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
               }}
             ></div>
           </div>
 
           <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
             <div>
-              <img
-                src="https://storage.googleapis.com/devitary-image-host.appspot.com/15846435184459982716-LogoMakr_7POjrN.png"
-                className="w-32 mx-auto"
-              />
+              <div
+                className="flex flex-shrink-0 items-center"
+                style={{
+                  display: "flex",
+                  alignContent: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "20px",
+                    border: "1px solid black",
+                    fontWeight: "bold",
+                    padding: "2px",
+                    margin: "2px",
+                    color: "yellow",
+                  }}
+                >
+                  🎬
+                </div>
+                <Link
+                  to="/"
+                  style={{
+                    color: "#003135",
+                    fontSize: "20px",
+                    marginLeft: "8px",
+                  }}
+                >
+                  Cαട𝜏Ƒι𝜏.
+                </Link>
+              </div>
             </div>
             <div className="mt-2 flex flex-col items-center">
               <div className="w-full flex-1 mt-8">

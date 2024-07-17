@@ -6,6 +6,7 @@ import Works from "./Works";
 import About from "./About";
 import Services from "./Services";
 import Testimonials from "./Testimonials";
+import Calltoaction from "./Calltoaction";
 
 function Home() {
   return (
@@ -54,6 +55,7 @@ function Home() {
       <Stats />
       <Works /> 
       <About/>
+      <Calltoaction/>
       <Services/>
       <Testimonials/>
       <Footer />

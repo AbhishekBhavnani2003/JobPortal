@@ -14,7 +14,8 @@ const userSchema = new Schema({
         type: String,
         required: true,
         unique: true
-    }
+    } , 
+    fcmToken: String
 });
 
 module.exports = mongoose.model('User', userSchema);

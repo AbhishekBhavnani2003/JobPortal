@@ -1,14 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { messaging } from "./Firebase";
+import { getToken } from "firebase/messaging";
 
 function Login() {
   const [signup, setSignup] = useState({
     name: "",
     password: "",
     email: "",
+    fcmToken: "",
   });
 
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const token = await getToken(messaging, {
+          vapidKey:
+            "BKRNTjBM1eRBPXw4X1Ns112YirSresp1Tdgl2XgKwnm5MA2sICg31UFpQg7aQL0mD4CRYxC41DS9soR9Jy07e2c",
+        });
+        if (token) {
+          console.log("FCM Token:", token);
+          setSignup((prevState) => ({ ...prevState, fcmToken: token }));
+        } else {
+          console.warn(
+            "No registration token available. Request permission to generate one."
+          );
+        }
+      } catch (error) {
+        console.error("An error occurred while retrieving token. ", error);
+      }
+    };
+
+    fetchToken();
+  }, []); 
+
+  useEffect(() => {
+    if (Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+  }, []);
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -29,7 +62,21 @@ function Login() {
       console.log(json);
 
       if (response.status === 200) {
-        setMessage("User Registered Successfully. Please Login to continue.");
+        setMessage("User Registered Successfully. Please Login to continue."); 
+              
+      if (Notification.permission === 'granted') {
+        new Notification('Welcome to CastFit', {
+          body: 'You have successfully Signed in!',
+        });
+      } else {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            new Notification('Welcome to CastFit', {
+              body: 'You have successfully Signed in!',
+            });
+          }
+        });
+      }
       } else if (response.status === 409) {
         setMessage("Email is already registered.");
         setErrors({ email: "Email is already registered" });
@@ -70,11 +117,37 @@ function Login() {
       <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
           <div>
-            <img
-              src="https://storage.googleapis.com/devitary-image-host.appspot.com/15846435184459982716-LogoMakr_7POjrN.png"
-              className="w-32 mx-auto"
-              alt="Logo"
-            />
+            <div
+              className="flex flex-shrink-0 items-center"
+              style={{
+                display: "flex",
+                alignContent: "center",
+                justifyContent: "center",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "20px",
+                  border: "1px solid black",
+                  fontWeight: "bold",
+                  padding: "2px",
+                  margin: "2px",
+                  color: "yellow",
+                }}
+              >
+                🎬
+              </div>
+              <Link
+                to="/"
+                style={{
+                  color: "#003135",
+                  fontSize: "20px",
+                  marginLeft: "8px",
+                }}
+              >
+                Cαട𝜏Ƒι𝜏.
+              </Link>
+            </div>
           </div>
           <div className="mt-2 flex flex-col items-center">
             <div className="w-full flex-1 mt-1">
@@ -92,7 +165,9 @@ function Login() {
                   placeholder="Name"
                   onChange={onInputChange}
                 />
-                  {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
+                {errors.name && (
+                  <p className="text-red-600 text-sm">{errors.name}</p>
+                )}
 
                 <input
                   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
@@ -102,8 +177,10 @@ function Login() {
                   placeholder="Password"
                   onChange={onInputChange}
                 />
-                  {errors.password && <p className="text-red-600 text-sm">{errors.password}</p>}
-  
+                {errors.password && (
+                  <p className="text-red-600 text-sm">{errors.password}</p>
+                )}
+
                 <input
                   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                   type="email"
@@ -112,10 +189,12 @@ function Login() {
                   placeholder="Email"
                   onChange={onInputChange}
                 />
-                 {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
+                {errors.email && (
+                  <p className="text-red-600 text-sm">{errors.email}</p>
+                )}
                 <button
                   className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
-                  onClick={(e)=> handleSignup(e)}
+                  onClick={(e) => handleSignup(e)}
                 >
                   <svg
                     className="w-6 h-6 -ml-2"
@@ -131,22 +210,34 @@ function Login() {
                   </svg>
                   <span className="ml-3">Sign Up</span>
                 </button>
-                <p className="mt-6 text-xs text-gray-600 text-center" style={{ fontSize: '15px' }}>
+                <p
+                  className="mt-6 text-xs text-gray-600 text-center"
+                  style={{ fontSize: "15px" }}
+                >
                   Already have an account:
-                  <a href="/login" className="border-b border-gray-500 border-dotted text-blue-700" style={{ marginLeft: '5px' }}>
+                  <a
+                    href="/login"
+                    className="border-b border-gray-500 border-dotted text-blue-700"
+                    style={{ marginLeft: "5px" }}
+                  >
                     Login
                   </a>
                 </p>
               </div>
-              {message && <p className="mt-2 text-center text-sm text-red-600">{message}</p>}
+              {message && (
+                <p className="mt-2 text-center text-sm text-red-600">
+                  {message}
+                </p>
+              )}
             </div>
           </div>
         </div>
-        <div className="flex-1 bg-indigo-100 text-center hidden lg:flex">
+        <div className="flex-1 text-center hidden lg:flex">
           <div
-            className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
+            className="w-full h-full bg-cover bg-center"
             style={{
-              backgroundImage: "url(https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg)",
+              backgroundImage:
+                "url(https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
             }}
           ></div>
         </div>

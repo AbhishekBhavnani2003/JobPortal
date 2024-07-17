@@ -20,9 +20,40 @@ import Displayapplicants from './component/Displayapplicants';
 import AppliedJobs from './component/AppliedJobs';
 import Footer from './component/Footer';
 import Updatepost from './component/Updatepost';
-import Contact from './component/Contact';
+import Contact from './component/Contact'; 
+import { useEffect } from 'react'; 
+import { messaging } from './component/Firebase';
+import { getToken } from 'firebase/messaging';
 
-function App() {
+
+function App() { 
+
+  useEffect(() => {
+    const requestPermission = async () => {
+      try {
+        const token = await getToken(messaging, { vapidKey: process.env.vapidKey });
+        if (token) {
+          console.warn("token", token);
+        } else {
+          console.warn('No registration token available. Request permission to generate one.');
+        }
+      } catch (error) {
+        console.error('An error occurred while retrieving token. ', error);
+      }
+    };
+
+    requestPermission();
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/firebase-messaging-sw.js')
+        .then(function(registration) {
+          console.log('Registration successful, scope is:', registration.scope);
+        }).catch(function(err) {
+          console.log('Service worker registration failed, error:', err);
+        });
+    }
+  }, []); 
+
   return (
     <div className="App">
        <Router>

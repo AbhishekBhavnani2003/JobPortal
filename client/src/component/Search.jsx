@@ -9,7 +9,7 @@ function Search() {
      navigate('/jobs')
   }
   return (
-    <div style={{ paddingBottom: "30px", background: "#EBEDF0" }}>
+    <div style={{ paddingBottom: "30px", marginTop:'-20px' }}>
       <div className="relative w-full max-w-xl mx-auto bg-white rounded-full">
         <input
           placeholder="e.g. Web Developer"
