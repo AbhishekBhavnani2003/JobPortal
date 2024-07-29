@@ -60,7 +60,7 @@ We value your feedback and suggestions to help us enhance Castfit. Please share 
 
 ## Further Contact
 
-- **LinkedIn**: [LinkedIn Profile](www.linkedin.com/in/abhishek-bhavnani)
+- **LinkedIn**: [LinkedIn Profile](https://www.linkedin.com/in/abhishek-bhavnani/)
 - **Email**: abhishekbhavnani2003@gmail.com
 
 Join us on Castfit today and be a part of a professional community dedicated to enhancing the casting experience. Visit  [castfit.vercel.app](https://castfit.vercel.app/) to explore the platform and start managing your casting needs effectively. Thank you!
